@@ -8,7 +8,10 @@ rows = []
 for f in sorted(Path("results/patchcore").glob("*.json")):
     d = json.loads(f.read_text())
     r = d["rows"]
-    m = lambda k: np.mean([x[k] for x in r])  # noqa: E731
+
+    def m(k, r=r):
+        return np.mean([x[k] for x in r])
+
     per = " / ".join(f"{x['image_auroc']:.3f}" for x in r)
     rows.append(f"| {d['tag']} | {per} | {m('image_auroc'):.3f} | {m('pixel_auroc'):.3f} | {m('pro'):.3f} | "
                 f"{m('recall_at_val_thr'):.2f} | {m('test_frr_at_val_thr'):.2f} | "
