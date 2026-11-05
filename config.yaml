@@ -1,0 +1,8 @@
+data_root: data/mvtec_ad
+categories: [bottle, metal_nut, screw]
+results_dir: results
+image_size: 256
+false_reject_rate: 0.01
+seed: 0
+n_golden: 20        # good train images used as golden references
+n_val_good: 20      # held-out good train images for threshold selection (never test images)
