@@ -4,8 +4,8 @@ setup:
 download:
 	scripts/download_data.sh
 lint:
-	ruff check .
+	python3 -m ruff check .
 test:
-	pytest -q
+	python3 -m pytest -q
 bench-classical:
-	python scripts/bench_classical.py
+	python3 scripts/bench_classical.py

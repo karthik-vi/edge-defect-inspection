@@ -1,0 +1,54 @@
+{
+ "date": "2026-11-05",
+ "cmd": "make bench-classical",
+ "cpu": "x86_64",
+ "opencv_threads": 1,
+ "n_golden": 20,
+ "n_val_good": 20,
+ "image_size": 256,
+ "align_mode": "none",
+ "rows": [
+  {
+   "category": "bottle",
+   "n_test": 83,
+   "n_defect": 63,
+   "image_auroc": 0.9849,
+   "recall_at_val_thr": 0.9524,
+   "test_frr_at_val_thr": 0.0,
+   "recall_at_1pct_frr_oracle": 0.9524,
+   "latency_ms": {
+    "p50": 1.18,
+    "p95": 1.27,
+    "p99": 1.31
+   }
+  },
+  {
+   "category": "metal_nut",
+   "n_test": 115,
+   "n_defect": 93,
+   "image_auroc": 0.6373,
+   "recall_at_val_thr": 0.3548,
+   "test_frr_at_val_thr": 0.0455,
+   "recall_at_1pct_frr_oracle": 0.2903,
+   "latency_ms": {
+    "p50": 1.22,
+    "p95": 1.35,
+    "p99": 1.39
+   }
+  },
+  {
+   "category": "screw",
+   "n_test": 160,
+   "n_defect": 119,
+   "image_auroc": 0.5261,
+   "recall_at_val_thr": 0.0336,
+   "test_frr_at_val_thr": 0.1707,
+   "recall_at_1pct_frr_oracle": 0.0084,
+   "latency_ms": {
+    "p50": 1.05,
+    "p95": 1.17,
+    "p99": 1.26
+   }
+  }
+ ]
+}

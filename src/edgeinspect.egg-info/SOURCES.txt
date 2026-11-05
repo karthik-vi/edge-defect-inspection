@@ -1,0 +1,14 @@
+LICENSE
+README.md
+pyproject.toml
+src/edgeinspect/__init__.py
+src/edgeinspect/classical.py
+src/edgeinspect/config.py
+src/edgeinspect/data.py
+src/edgeinspect/metrics.py
+src/edgeinspect.egg-info/PKG-INFO
+src/edgeinspect.egg-info/SOURCES.txt
+src/edgeinspect.egg-info/dependency_links.txt
+src/edgeinspect.egg-info/requires.txt
+src/edgeinspect.egg-info/top_level.txt
+tests/test_classical.py

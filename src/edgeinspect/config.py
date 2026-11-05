@@ -17,6 +17,7 @@ class Settings(BaseModel):
     seed: int = 0
     n_golden: int = 20
     n_val_good: int = 20
+    align_mode: str = "none"  # none | translate | rotate
 
 
 def load_settings(path: str | None = None) -> Settings:
