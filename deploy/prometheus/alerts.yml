@@ -1,0 +1,21 @@
+groups:
+  - name: edge-inspection
+    rules:
+      - alert: CameraOrLightingDrift
+        expr: inspect_drift_alert == 1
+        for: 1m
+        labels: {severity: warning}
+        annotations:
+          summary: "Drift detected on {{ $labels.category }} (score {{ $value }}); check camera focus, position and lighting before recall degrades"
+      - alert: RejectRateHigh
+        expr: inspect_reject_rate > 0.15
+        for: 5m
+        labels: {severity: warning}
+        annotations:
+          summary: "Reject rate above 15% on {{ $labels.category }}: real defect wave or drift"
+      - alert: InspectionSlow
+        expr: histogram_quantile(0.99, sum by (le, category) (rate(inspect_latency_seconds_bucket[5m]))) > 0.1
+        for: 5m
+        labels: {severity: warning}
+        annotations:
+          summary: "p99 inspection latency above 100 ms on {{ $labels.category }}"

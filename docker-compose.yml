@@ -1,0 +1,12 @@
+# NOT verified in this environment (no Docker available). Run `make build-deploy` first to create ./models.
+services:
+  inspection:
+    build: .
+    ports: ["8000:8000"]
+    volumes: ["./models:/app/models:ro"]
+  prometheus:
+    image: prom/prometheus:v2.53.0
+    ports: ["9090:9090"]
+    volumes:
+      - ./deploy/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./deploy/prometheus/alerts.yml:/etc/prometheus/alerts.yml:ro
