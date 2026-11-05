@@ -20,6 +20,15 @@ class Settings(BaseModel):
     pc_val_good: int = 40
     pc_train_max: int = 100
     pc_size: int = 224
+    pc_ratio: float = 0.05
+    threads: int = 4
+    deploy_dir: str = "models/deploy"
+    onnx_model: str = "models/r18_int8.onnx"
+    mlflow_uri: str = "sqlite:///mlflow.db"
+    drift_window: int = 20
+    drift_z: float = 5.0         # alert if |z| of a window-mean image statistic exceeds this
+    drift_alpha: float = 0.001   # alert if Bonferroni-corrected KS p-value on PCA comps is below this
+    service_port: int = 8000
     align_mode: str = "none"  # none | translate | rotate
 
 

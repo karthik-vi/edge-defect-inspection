@@ -11,3 +11,13 @@ align_mode: none  # none | translate | rotate (see docs/DECISIONS.md ADR-001)
 pc_val_good: 40      # held-out good train images for threshold (not in memory bank)
 pc_train_max: 100    # max good train images used to build the memory bank (CPU time budget)
 pc_size: 224
+# Deployment / service / drift
+pc_ratio: 0.05
+threads: 4
+deploy_dir: models/deploy
+onnx_model: models/r18_int8.onnx
+mlflow_uri: "sqlite:///mlflow.db"
+drift_window: 20
+drift_z: 5.0
+drift_alpha: 0.001
+service_port: 8000

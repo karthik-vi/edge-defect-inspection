@@ -98,9 +98,22 @@ class PatchCore:
         self.index = faiss.IndexFlatL2(self.bank.shape[1])
         self.index.add(self.bank)
 
+    def set_bank(self, bank: np.ndarray) -> None:
+        self.bank = np.ascontiguousarray(bank, dtype=np.float32)
+        self.index = faiss.IndexFlatL2(self.bank.shape[1])
+        self.index.add(self.bank)
+
     def maps(self, imgs: list[np.ndarray]) -> np.ndarray:
         """Pixel anomaly maps (N,size,size) from nearest-neighbour patch distance."""
+        return self._maps(self.embed(imgs))
+
+    def infer(self, imgs: list[np.ndarray]) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+        """One feature pass -> (image scores (N,), maps (N,S,S), global embeddings (N,D))."""
         f = self.embed(imgs)
+        m = self._maps(f)
+        return m.reshape(len(m), -1).max(1), m, f.mean((1, 2))
+
+    def _maps(self, f: np.ndarray) -> np.ndarray:
         n, h, w, d = f.shape
         dist, _ = self.index.search(np.ascontiguousarray(f.reshape(-1, d)), 1)
         m = np.sqrt(np.maximum(dist, 0)).reshape(n, h, w)

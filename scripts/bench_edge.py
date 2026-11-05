@@ -17,7 +17,6 @@ from pathlib import Path
 import cv2
 import faiss
 import numpy as np
-import onnxruntime as ort
 import torch
 
 from bench_patchcore import run
@@ -25,19 +24,7 @@ from edgeinspect.config import load_settings
 from edgeinspect.data import list_test, list_train
 from edgeinspect.metrics import latency_percentiles
 from edgeinspect.patchcore import Extractor, PatchCore
-
-
-class OrtExt:
-    dim = 256
-
-    def __init__(self, path: str, threads: int) -> None:
-        so = ort.SessionOptions()
-        so.intra_op_num_threads, so.inter_op_num_threads = threads, 1
-        so.add_session_config_entry("session.intra_op.allow_spinning", "0")  # avoids contention with FAISS OpenMP
-        self.s = ort.InferenceSession(path, so, providers=["CPUExecutionProvider"])
-
-    def __call__(self, x: torch.Tensor) -> torch.Tensor:
-        return torch.from_numpy(self.s.run(None, {"image": x.numpy()})[0])
+from edgeinspect.runtime import OrtExtractor as OrtExt
 
 
 class OvExt:
