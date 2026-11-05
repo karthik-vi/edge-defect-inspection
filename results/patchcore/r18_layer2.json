@@ -1,0 +1,77 @@
+{
+ "tag": "r18_layer2",
+ "args": {
+  "tag": "r18_layer2",
+  "backbone": "resnet18",
+  "layers": "2",
+  "ratio": 0.1,
+  "align": "none",
+  "dim": 256,
+  "threads": 4,
+  "cats": ""
+ },
+ "date": "2026-11-05",
+ "cpu": "x86_64",
+ "torch": "2.15.0+cpu",
+ "n_val_good": 40,
+ "pc_train_max": 100,
+ "rows": [
+  {
+   "category": "bottle",
+   "n_test": 83,
+   "n_bank_imgs": 100,
+   "bank_patches": 7840,
+   "bank_mb": 7.66,
+   "fit_s": 15.2,
+   "image_auroc": 1.0,
+   "pixel_auroc": 0.9852,
+   "pro": 0.9488,
+   "recall_at_val_thr": 1.0,
+   "test_frr_at_val_thr": 0.0,
+   "recall_at_1pct_frr_oracle": 1.0,
+   "latency_ms": {
+    "p50": 32.2,
+    "p95": 38.1,
+    "p99": 73.6
+   }
+  },
+  {
+   "category": "metal_nut",
+   "n_test": 115,
+   "n_bank_imgs": 100,
+   "bank_patches": 7840,
+   "bank_mb": 7.66,
+   "fit_s": 15.0,
+   "image_auroc": 0.9907,
+   "pixel_auroc": 0.9781,
+   "pro": 0.9389,
+   "recall_at_val_thr": 0.957,
+   "test_frr_at_val_thr": 0.0,
+   "recall_at_1pct_frr_oracle": 0.9785,
+   "latency_ms": {
+    "p50": 30.7,
+    "p95": 36.7,
+    "p99": 46.4
+   }
+  },
+  {
+   "category": "screw",
+   "n_test": 160,
+   "n_bank_imgs": 100,
+   "bank_patches": 7840,
+   "bank_mb": 7.66,
+   "fit_s": 14.7,
+   "image_auroc": 0.9447,
+   "pixel_auroc": 0.992,
+   "pro": 0.9573,
+   "recall_at_val_thr": 0.4622,
+   "test_frr_at_val_thr": 0.0,
+   "recall_at_1pct_frr_oracle": 0.5714,
+   "latency_ms": {
+    "p50": 32.4,
+    "p95": 52.5,
+    "p99": 69.9
+   }
+  }
+ ]
+}
