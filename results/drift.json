@@ -1,0 +1,556 @@
+{
+ "date": "2026-11-05",
+ "window": 20,
+ "z_thr": 3.0,
+ "alpha": 0.001,
+ "cats": {
+  "bottle": {
+   "lighting": {
+    "levels": [
+     1.0,
+     0.94,
+     0.88,
+     0.82,
+     0.7,
+     0.55
+    ],
+    "rows": [
+     {
+      "recall": 1.0,
+      "frr": 0.0,
+      "drift_score": 0.12188902027526373,
+      "alert_frac": 0.0,
+      "n_windows": 3,
+      "n_good": 60,
+      "n_defect": 40
+     },
+     {
+      "recall": 1.0,
+      "frr": 0.0,
+      "drift_score": 2.0782810846964517,
+      "alert_frac": 1.0,
+      "n_windows": 3,
+      "n_good": 60,
+      "n_defect": 40
+     },
+     {
+      "recall": 1.0,
+      "frr": 0.0,
+      "drift_score": 4.024220148722331,
+      "alert_frac": 1.0,
+      "n_windows": 3,
+      "n_good": 60,
+      "n_defect": 40
+     },
+     {
+      "recall": 1.0,
+      "frr": 0.0,
+      "drift_score": 5.966713587443034,
+      "alert_frac": 1.0,
+      "n_windows": 3,
+      "n_good": 60,
+      "n_defect": 40
+     },
+     {
+      "recall": 1.0,
+      "frr": 0.0,
+      "drift_score": 9.938568115234375,
+      "alert_frac": 1.0,
+      "n_windows": 3,
+      "n_good": 60,
+      "n_defect": 40
+     },
+     {
+      "recall": 1.0,
+      "frr": 0.016666666666666666,
+      "drift_score": 14.856141090393066,
+      "alert_frac": 1.0,
+      "n_windows": 3,
+      "n_good": 60,
+      "n_defect": 40
+     }
+    ],
+    "first_alert_level": 1,
+    "first_degraded_level": null
+   },
+   "defocus": {
+    "levels": [
+     0,
+     0.5,
+     1,
+     2,
+     3,
+     5
+    ],
+    "rows": [
+     {
+      "recall": 1.0,
+      "frr": 0.0,
+      "drift_score": 0.12188902027526373,
+      "alert_frac": 0.0,
+      "n_windows": 3,
+      "n_good": 60,
+      "n_defect": 40
+     },
+     {
+      "recall": 1.0,
+      "frr": 0.0,
+      "drift_score": 0.15364069988330206,
+      "alert_frac": 0.0,
+      "n_windows": 3,
+      "n_good": 60,
+      "n_defect": 40
+     },
+     {
+      "recall": 1.0,
+      "frr": 0.0,
+      "drift_score": 0.7290235360463461,
+      "alert_frac": 0.0,
+      "n_windows": 3,
+      "n_good": 60,
+      "n_defect": 40
+     },
+     {
+      "recall": 1.0,
+      "frr": 0.0,
+      "drift_score": 2.202736775080363,
+      "alert_frac": 1.0,
+      "n_windows": 3,
+      "n_good": 60,
+      "n_defect": 40
+     },
+     {
+      "recall": 1.0,
+      "frr": 0.0,
+      "drift_score": 3.57792749952119,
+      "alert_frac": 1.0,
+      "n_windows": 3,
+      "n_good": 60,
+      "n_defect": 40
+     },
+     {
+      "recall": 1.0,
+      "frr": 0.25,
+      "drift_score": 5.140264537308425,
+      "alert_frac": 1.0,
+      "n_windows": 3,
+      "n_good": 60,
+      "n_defect": 40
+     }
+    ],
+    "first_alert_level": 3,
+    "first_degraded_level": 5
+   },
+   "camera_shift": {
+    "levels": [
+     0,
+     4,
+     8,
+     16,
+     32,
+     64
+    ],
+    "rows": [
+     {
+      "recall": 1.0,
+      "frr": 0.0,
+      "drift_score": 0.12188902027526373,
+      "alert_frac": 0.0,
+      "n_windows": 3,
+      "n_good": 60,
+      "n_defect": 40
+     },
+     {
+      "recall": 1.0,
+      "frr": 0.0,
+      "drift_score": 0.7633585333824158,
+      "alert_frac": 0.0,
+      "n_windows": 3,
+      "n_good": 60,
+      "n_defect": 40
+     },
+     {
+      "recall": 1.0,
+      "frr": 0.0,
+      "drift_score": 1.4583117961883545,
+      "alert_frac": 1.0,
+      "n_windows": 3,
+      "n_good": 60,
+      "n_defect": 40
+     },
+     {
+      "recall": 1.0,
+      "frr": 0.0,
+      "drift_score": 2.8484484354654946,
+      "alert_frac": 1.0,
+      "n_windows": 3,
+      "n_good": 60,
+      "n_defect": 40
+     },
+     {
+      "recall": 1.0,
+      "frr": 0.0,
+      "drift_score": 5.63291597366333,
+      "alert_frac": 1.0,
+      "n_windows": 3,
+      "n_good": 60,
+      "n_defect": 40
+     },
+     {
+      "recall": 1.0,
+      "frr": 1.0,
+      "drift_score": 10.885404268900553,
+      "alert_frac": 1.0,
+      "n_windows": 3,
+      "n_good": 60,
+      "n_defect": 40
+     }
+    ],
+    "first_alert_level": 2,
+    "first_degraded_level": 5
+   },
+   "sensor_noise": {
+    "levels": [
+     0,
+     2,
+     4,
+     8,
+     16,
+     32
+    ],
+    "rows": [
+     {
+      "recall": 1.0,
+      "frr": 0.0,
+      "drift_score": 0.12188902027526373,
+      "alert_frac": 0.0,
+      "n_windows": 3,
+      "n_good": 60,
+      "n_defect": 40
+     },
+     {
+      "recall": 1.0,
+      "frr": 0.0,
+      "drift_score": 0.15689141800006232,
+      "alert_frac": 0.0,
+      "n_windows": 3,
+      "n_good": 60,
+      "n_defect": 40
+     },
+     {
+      "recall": 1.0,
+      "frr": 0.0,
+      "drift_score": 0.21788565814495087,
+      "alert_frac": 0.0,
+      "n_windows": 3,
+      "n_good": 60,
+      "n_defect": 40
+     },
+     {
+      "recall": 1.0,
+      "frr": 0.0,
+      "drift_score": 0.6134872807980553,
+      "alert_frac": 0.0,
+      "n_windows": 3,
+      "n_good": 60,
+      "n_defect": 40
+     },
+     {
+      "recall": 1.0,
+      "frr": 0.0,
+      "drift_score": 2.446391241266141,
+      "alert_frac": 1.0,
+      "n_windows": 3,
+      "n_good": 60,
+      "n_defect": 40
+     },
+     {
+      "recall": 1.0,
+      "frr": 1.0,
+      "drift_score": 4.318615046097018,
+      "alert_frac": 1.0,
+      "n_windows": 3,
+      "n_good": 60,
+      "n_defect": 40
+     }
+    ],
+    "first_alert_level": 4,
+    "first_degraded_level": 5
+   }
+  },
+  "metal_nut": {
+   "lighting": {
+    "levels": [
+     1.0,
+     0.94,
+     0.88,
+     0.82,
+     0.7,
+     0.55
+    ],
+    "rows": [
+     {
+      "recall": 0.975,
+      "frr": 0.05,
+      "drift_score": 0.211423657772814,
+      "alert_frac": 0.0,
+      "n_windows": 3,
+      "n_good": 60,
+      "n_defect": 40
+     },
+     {
+      "recall": 0.975,
+      "frr": 0.05,
+      "drift_score": 0.24968894849322307,
+      "alert_frac": 0.0,
+      "n_windows": 3,
+      "n_good": 60,
+      "n_defect": 40
+     },
+     {
+      "recall": 0.975,
+      "frr": 0.05,
+      "drift_score": 0.4117235044638316,
+      "alert_frac": 0.0,
+      "n_windows": 3,
+      "n_good": 60,
+      "n_defect": 40
+     },
+     {
+      "recall": 0.975,
+      "frr": 0.05,
+      "drift_score": 0.6982234599982765,
+      "alert_frac": 0.0,
+      "n_windows": 3,
+      "n_good": 60,
+      "n_defect": 40
+     },
+     {
+      "recall": 0.975,
+      "frr": 0.05,
+      "drift_score": 1.6220888150769257,
+      "alert_frac": 1.0,
+      "n_windows": 3,
+      "n_good": 60,
+      "n_defect": 40
+     },
+     {
+      "recall": 1.0,
+      "frr": 0.1,
+      "drift_score": 3.5001796972237984,
+      "alert_frac": 1.0,
+      "n_windows": 3,
+      "n_good": 60,
+      "n_defect": 40
+     }
+    ],
+    "first_alert_level": 4,
+    "first_degraded_level": 5
+   },
+   "defocus": {
+    "levels": [
+     0,
+     0.5,
+     1,
+     2,
+     3,
+     5
+    ],
+    "rows": [
+     {
+      "recall": 0.975,
+      "frr": 0.05,
+      "drift_score": 0.211423657772814,
+      "alert_frac": 0.0,
+      "n_windows": 3,
+      "n_good": 60,
+      "n_defect": 40
+     },
+     {
+      "recall": 0.975,
+      "frr": 0.05,
+      "drift_score": 0.2278694330648321,
+      "alert_frac": 0.0,
+      "n_windows": 3,
+      "n_good": 60,
+      "n_defect": 40
+     },
+     {
+      "recall": 0.975,
+      "frr": 0.08333333333333333,
+      "drift_score": 0.8795596162478129,
+      "alert_frac": 0.0,
+      "n_windows": 3,
+      "n_good": 60,
+      "n_defect": 40
+     },
+     {
+      "recall": 1.0,
+      "frr": 0.15,
+      "drift_score": 2.6381777922312417,
+      "alert_frac": 1.0,
+      "n_windows": 3,
+      "n_good": 60,
+      "n_defect": 40
+     },
+     {
+      "recall": 1.0,
+      "frr": 0.38333333333333336,
+      "drift_score": 4.296901189876759,
+      "alert_frac": 1.0,
+      "n_windows": 3,
+      "n_good": 60,
+      "n_defect": 40
+     },
+     {
+      "recall": 1.0,
+      "frr": 1.0,
+      "drift_score": 6.790315508811599,
+      "alert_frac": 1.0,
+      "n_windows": 3,
+      "n_good": 60,
+      "n_defect": 40
+     }
+    ],
+    "first_alert_level": 3,
+    "first_degraded_level": 3
+   },
+   "camera_shift": {
+    "levels": [
+     0,
+     4,
+     8,
+     16,
+     32,
+     64
+    ],
+    "rows": [
+     {
+      "recall": 0.975,
+      "frr": 0.05,
+      "drift_score": 0.211423657772814,
+      "alert_frac": 0.0,
+      "n_windows": 3,
+      "n_good": 60,
+      "n_defect": 40
+     },
+     {
+      "recall": 0.975,
+      "frr": 0.03333333333333333,
+      "drift_score": 0.3000386655330658,
+      "alert_frac": 0.0,
+      "n_windows": 3,
+      "n_good": 60,
+      "n_defect": 40
+     },
+     {
+      "recall": 1.0,
+      "frr": 0.05,
+      "drift_score": 0.5675743818283081,
+      "alert_frac": 0.0,
+      "n_windows": 3,
+      "n_good": 60,
+      "n_defect": 40
+     },
+     {
+      "recall": 0.975,
+      "frr": 0.0,
+      "drift_score": 1.1004886229832966,
+      "alert_frac": 1.0,
+      "n_windows": 3,
+      "n_good": 60,
+      "n_defect": 40
+     },
+     {
+      "recall": 0.975,
+      "frr": 0.08333333333333333,
+      "drift_score": 2.167823314666748,
+      "alert_frac": 1.0,
+      "n_windows": 3,
+      "n_good": 60,
+      "n_defect": 40
+     },
+     {
+      "recall": 1.0,
+      "frr": 0.9333333333333333,
+      "drift_score": 4.149471600850423,
+      "alert_frac": 1.0,
+      "n_windows": 3,
+      "n_good": 60,
+      "n_defect": 40
+     }
+    ],
+    "first_alert_level": 3,
+    "first_degraded_level": 5
+   },
+   "sensor_noise": {
+    "levels": [
+     0,
+     2,
+     4,
+     8,
+     16,
+     32
+    ],
+    "rows": [
+     {
+      "recall": 0.975,
+      "frr": 0.05,
+      "drift_score": 0.211423657772814,
+      "alert_frac": 0.0,
+      "n_windows": 3,
+      "n_good": 60,
+      "n_defect": 40
+     },
+     {
+      "recall": 0.975,
+      "frr": 0.05,
+      "drift_score": 0.18739671615205356,
+      "alert_frac": 0.0,
+      "n_windows": 3,
+      "n_good": 60,
+      "n_defect": 40
+     },
+     {
+      "recall": 0.975,
+      "frr": 0.05,
+      "drift_score": 0.18826515502849098,
+      "alert_frac": 0.0,
+      "n_windows": 3,
+      "n_good": 60,
+      "n_defect": 40
+     },
+     {
+      "recall": 0.975,
+      "frr": 0.06666666666666667,
+      "drift_score": 0.44257281223932904,
+      "alert_frac": 0.0,
+      "n_windows": 3,
+      "n_good": 60,
+      "n_defect": 40
+     },
+     {
+      "recall": 0.975,
+      "frr": 0.08333333333333333,
+      "drift_score": 1.2168504524440042,
+      "alert_frac": 1.0,
+      "n_windows": 3,
+      "n_good": 60,
+      "n_defect": 40
+     },
+     {
+      "recall": 1.0,
+      "frr": 0.5333333333333333,
+      "drift_score": 3.8811812059947024,
+      "alert_frac": 1.0,
+      "n_windows": 3,
+      "n_good": 60,
+      "n_defect": 40
+     }
+    ],
+    "first_alert_level": 4,
+    "first_degraded_level": 5
+   }
+  }
+ }
+}

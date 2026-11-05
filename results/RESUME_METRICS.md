@@ -33,3 +33,7 @@ Latency p50/p95/p99 (mean over categories): 34 / 41 / 54 ms (~29 parts/s on 4 th
 - INT8 PTQ (ORT static QDQ, 32 good-part calibration images): model 11.0 → 3.1 MB; mean image AUROC 0.9696 (FP32) → 0.9678 (INT8), delta −0.0018; pixel AUROC 0.9829 → 0.9827
 - Latency p50 (1 / 2 / 4 threads): PyTorch FP32 71 / 40 / 28 ms; ORT INT8 50 / 29 / 25 ms (p99 at 4 threads 37 ms; ~40 parts/s); OpenVINO INT8 45 / 25 / 24 ms
 - Cost per 1k parts uses an *assumed* $0.04/vCPU-hour: ~$0.001 (assumption, not a measurement)
+
+## Phase 4: service + drift monitor
+- Service smoke test (real engine, ORT INT8, 4 threads): verdicts accept/reject correct on one good and one broken bottle, ~35 ms per call, model_version traced to MLflow run 9d7235dd3978. Reproduce: `make build-deploy serve`. Docker/Prometheus: **not verified in this environment**.
+- Drift monitor: `make bench-drift` (raw `results/drift.json`, plots `results/plots/drift_*.png`), 2026-11-05, same 4-vCPU VM. 0/8 false alarms at severity 0 (3 windows of 20 clean parts). Alert came strictly before operational degradation (recall −0.10 or FRR +0.05) in 7/8 synthetic-drift curves, tied in 1. Examples: bottle camera shift alert at 8 px vs degradation at 64 px; bottle blur alert at sigma 2 vs 5; metal_nut dimming alert at gain 0.7 vs 0.55. Under drift recall did not fall (it rose); the harm is false rejects (up to 100% FRR at the highest severities). Thresholds were set after one false-alarm iteration on the same data (see ADR-006).

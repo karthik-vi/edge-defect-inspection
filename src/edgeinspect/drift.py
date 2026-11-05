@@ -33,12 +33,14 @@ class DriftReport:
 class DriftMonitor:
     """Compares a window of production images against a reference set of good parts.
 
-    score = max(max_i |z_i| / z_thr, log(p_bonf)/log(alpha)); alert when score >= 1.
-    z_i: z-score of the window mean of image statistic i (ref sd / sqrt(window)).
+    score = max(max_i d_i / z_thr, log(p_bonf)/log(alpha)); alert when score >= 1.
+    d_i: effect size = |window mean - ref mean| / ref per-image sd of statistic i. (A significance
+    z-test on window means false-alarmed on clean held-out parts: they sit ~1 sd from the train
+    reference, so an effect-size tolerance is used instead.)
     p_bonf: Bonferroni-corrected min KS p-value over the PCA components of the mean-pooled embedding.
     """
 
-    def __init__(self, ref_stats: np.ndarray, ref_emb: np.ndarray, z_thr: float = 5.0,
+    def __init__(self, ref_stats: np.ndarray, ref_emb: np.ndarray, z_thr: float = 3.0,
                  alpha: float = 1e-3, n_comp: int = 5) -> None:
         self.mu, self.sd = ref_stats.mean(0), np.maximum(ref_stats.std(0), 1e-6)
         self.pca = PCA(n_components=n_comp, random_state=0).fit(ref_emb)
@@ -46,8 +48,7 @@ class DriftMonitor:
         self.z_thr, self.alpha, self.n_comp = z_thr, alpha, n_comp
 
     def check(self, stats: np.ndarray, emb: np.ndarray) -> DriftReport:
-        n = len(stats)
-        z = np.abs(stats.mean(0) - self.mu) / (self.sd / np.sqrt(n))
+        z = np.abs(stats.mean(0) - self.mu) / self.sd
         proj = self.pca.transform(emb)
         p = min(ks_2samp(self.ref_proj[:, k], proj[:, k]).pvalue for k in range(self.n_comp))
         p_bonf = min(1.0, p * self.n_comp)

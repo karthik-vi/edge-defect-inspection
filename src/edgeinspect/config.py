@@ -26,7 +26,7 @@ class Settings(BaseModel):
     onnx_model: str = "models/r18_int8.onnx"
     mlflow_uri: str = "sqlite:///mlflow.db"
     drift_window: int = 20
-    drift_z: float = 5.0         # alert if |z| of a window-mean image statistic exceeds this
+    drift_z: float = 3.0         # alert if a window-mean image statistic moves > this many per-image SDs
     drift_alpha: float = 0.001   # alert if Bonferroni-corrected KS p-value on PCA comps is below this
     service_port: int = 8000
     align_mode: str = "none"  # none | translate | rotate

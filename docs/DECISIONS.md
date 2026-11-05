@@ -52,3 +52,26 @@ All numbers are means over bottle/metal_nut/screw, one seed; differences < ~0.01
 - **Bug found and fixed on the way (worth knowing for interviews):** the first ONNX export traced the pooling-matrix construction element by element (thousands of nodes) and ONNX Runtime output differed 31% from PyTorch; fixing it to be a constant gives an exact match. Second: ORT at 4 threads was 2x *slower* than at 2 threads (65 vs 33 ms) due to thread spinning contention with FAISS' OpenMP threads; `session.intra_op.allow_spinning=0` fixed it (65 → 30 ms).
 - **Cost:** 1,000 parts take ~25 s of a 4-vCPU box at 4 threads (40 parts/s); at an *assumed* $0.04/vCPU-hour (placeholder, not measured) that is ~$0.001 per 1,000 parts. Peak RSS in `results/edge/*.json` is for the whole benchmark process (it holds all test images), so it is an upper bound, not the service footprint.
 - **Dependencies added:** onnx + onnxruntime (export + inference, MIT), openvino (comparison, Apache-2.0).
+
+## ADR-005: Inspection service, model versioning, observability (Phase 4)
+- **Problem:** operators need verdict + score + a heatmap per part; every verdict must be traceable to the model that produced it; ops needs throughput/latency/reject-rate/drift signals.
+- **Decision:** FastAPI service (`/inspect/{category}`, `/inspect_batch/{category}`, `/model`, `/healthz`, `/metrics`) over the ONNX-Runtime-INT8 PatchCore engine (ADR-004). `scripts/build_deploy.py` builds bank + threshold + drift reference per category and logs params/metrics/artifacts to **MLflow** (SQLite backend); the MLflow run id (12 chars) is the `model_version` returned with every verdict. Prometheus metrics: `inspect_parts_total{verdict}`, `inspect_latency_seconds`, `inspect_reject_rate`, `inspect_drift_score`, `inspect_drift_alert`; alert rules in `deploy/prometheus/alerts.yml`.
+- **Why MLflow:** it answers "which model made this call?" (run id → params, git commit, metrics, artifacts). Simplification: no stage-transition registry — the deployed version is `models/deploy/version.json` (tag `deployed=true` on the run). MLflow 3.x refuses the file store, hence SQLite.
+- **Evidence (verified here):** 11 unit/API tests (mocked engine, CI-safe); live smoke test on the real engine: good bottle → accept (score 0.69 < thr 0.92), broken bottle → reject (1.93) with overlay PNG, `model_version` 9d7235dd3978, `/metrics` counters incremented; single-part service latency ~35 ms (first call 117 ms warm-up).
+- **Not verified in this environment:** Docker image build/run (`Dockerfile`, `docker-compose.yml`: the Docker CLI exists but there is no daemon; only `docker compose config` syntax validation passed), Prometheus scraping and rule evaluation (rules are only YAML-parsed; no `promtool`).
+- **Dependencies added:** fastapi/uvicorn/python-multipart (service), prometheus-client (metrics), mlflow-skinny + sqlalchemy/alembic (run tracking), matplotlib (plots), scipy (KS test, already pulled by scikit-learn).
+
+## ADR-006: Drift monitor (Phase 4)
+- **Problem:** camera/lighting drift silently degrades inspection. Metric: does the monitor alert *before* operational metrics degrade, with no false alarm on clean parts?
+- **Design:** per window of 20 parts, compare to a reference of 140 good parts: (a) image statistics — brightness, log Laplacian variance (blur), part-centroid x/y (alignment offset) — as an *effect size* (window-mean shift / per-image reference SD, alert at 3 SD); (b) the mean-pooled 256-d patch embedding, PCA(5) + two-sample KS test per component, Bonferroni, alert at p<0.001. Score ≥ 1 = alert.
+- **Evidence** (`results/drift.json`, plots `results/plots/drift_*.png`; stream = 60 held-out good parts, 3 windows; recall on 40 test defects; synthetic drift at 6 severity levels; bottle and metal_nut only because screw recall is already 0.45; no alert at severity 0 in any of the 8 curves):
+
+| drift | bottle: first alert → first operational degradation | metal_nut: alert → degradation |
+|---|---|---|
+| lighting (dimming gain) | 0.94 → never in range | 0.7 → 0.55 |
+| defocus (blur sigma px) | 2 → 5 | 2 → 2 (tie) |
+| camera shift (px @1024) | 8 → 64 | 16 → 64 |
+| sensor noise (sigma) | 16 → 32 | 16 → 32 |
+
+  "Operational degradation" = recall at the fixed threshold drops ≥0.10 **or** false-reject rate rises ≥0.05 above baseline. **Finding:** recall never dropped under any drift (it rose to 1.0: drift makes everything look anomalous); the real failure is *false rejects* — good parts scrapped (e.g. bottle at 64 px shift: FRR 1.00; metal_nut at blur 5: FRR 1.00). The monitor alerted strictly earlier in 7 of 8 cases and tied in 1.
+- **Honest caveats:** the first version used a z-test on window means and an in-distribution test mix with 75% defects; it false-alarmed at severity 0, so I changed to an effect-size tolerance (3 SD) and a good-only stream *after seeing that false alarm* — the 3 SD / 1e-3 thresholds were therefore set once by looking at clean-window behaviour on this same data, not on an independent set. Synthetic drift, 2 categories, 3 windows of 20 parts per point, one seed: lead times are indicative, not guaranteed. The monitor detects distribution change, it does not know whether accuracy will actually suffer.

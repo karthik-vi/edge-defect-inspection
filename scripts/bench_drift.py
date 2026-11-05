@@ -14,9 +14,8 @@ import matplotlib
 import numpy as np
 
 from edgeinspect.config import load_settings
-from edgeinspect.data import list_test
+from edgeinspect.data import list_test, list_train
 from edgeinspect.engine import Engine
-from edgeinspect.metrics import image_auroc, recall_at_threshold
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
@@ -35,21 +34,24 @@ DRIFTS = {  # name -> (label, 6 severity levels, fn(img, level, rng))
 }
 
 
-def evaluate(eng: Engine, imgs, labels, fn, level, cfg) -> dict:
+def evaluate(eng: Engine, good, defect, fn, level, cfg) -> dict:
+    """good: production stream of good parts (drift monitor input + false rejects);
+    defect: defective parts (recall). Both drifted identically."""
     rng = np.random.default_rng(cfg.seed)
-    sc, stats, emb = [], [], []
-    for im in imgs:
+    sg, stats, emb = [], [], []
+    for im in good:
         v = eng.inspect(fn(im, level, rng))
-        sc.append(v.score)
+        sg.append(v.score)
         stats.append(v.stats)
         emb.append(v.embedding)
-    sc, stats, emb = np.array(sc), np.stack(stats), np.stack(emb)
-    rec, frr = recall_at_threshold(labels, sc, eng.thr)
+    sd = np.array([eng.inspect(fn(im, level, rng)).score for im in defect])
+    sg, stats, emb = np.array(sg), np.stack(stats), np.stack(emb)
     w = cfg.drift_window
-    reps = [eng.monitor.check(stats[i:i + w], emb[i:i + w]) for i in range(0, len(sc) - w + 1, w)]
-    return {"recall": rec, "frr": frr, "auroc": image_auroc(labels, sc),
+    reps = [eng.monitor.check(stats[i:i + w], emb[i:i + w]) for i in range(0, len(sg) - w + 1, w)]
+    return {"recall": float((sd > eng.thr).mean()), "frr": float((sg > eng.thr).mean()),
             "drift_score": float(np.mean([r.score for r in reps])),
-            "alert_frac": float(np.mean([r.alert for r in reps])), "n_windows": len(reps)}
+            "alert_frac": float(np.mean([r.alert for r in reps])), "n_windows": len(reps),
+            "n_good": len(good), "n_defect": len(defect)}
 
 
 if __name__ == "__main__":
@@ -60,14 +62,19 @@ if __name__ == "__main__":
     Path("results/plots").mkdir(parents=True, exist_ok=True)
     for cat in cats:
         eng = Engine.load(cat, cfg)
+        rng = np.random.default_rng(0)
         test = list_test(cfg.data_root, cat)
-        order = np.random.default_rng(0).permutation(len(test))
-        imgs = [cv2.imread(str(test[i][0])) for i in order]
-        labels = np.array([test[i][1] for i in order])
+        tr = list_train(cfg.data_root, cat)
+        unused = [tr[i] for i in np.random.default_rng(cfg.seed).permutation(len(tr))[
+            cfg.pc_val_good + cfg.pc_train_max:]]  # good train parts never used for bank/threshold/ref
+        gp = unused + [p for p, lab, _ in test if lab == 0]
+        good = [cv2.imread(str(gp[i])) for i in rng.permutation(len(gp))[:60]]  # 3 windows of 20
+        dp = [p for p, lab, _ in test if lab == 1]
+        defect = [cv2.imread(str(dp[i])) for i in rng.permutation(len(dp))[:40]]
         res["cats"][cat] = {}
         fig, axes = plt.subplots(1, 4, figsize=(17, 3.6), sharey=False)
         for ax, (name, (lab, levels, fn)) in zip(axes, DRIFTS.items(), strict=True):
-            rows = [evaluate(eng, imgs, labels, fn, lv, cfg) for lv in levels]
+            rows = [evaluate(eng, good, defect, fn, lv, cfg) for lv in levels]
             base = rows[0]
             first_alert = next((i for i, r in enumerate(rows) if r["alert_frac"] >= 0.5), None)
             first_deg = next((i for i, r in enumerate(rows)
