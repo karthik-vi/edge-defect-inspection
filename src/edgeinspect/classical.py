@@ -29,15 +29,17 @@ def part_mask(gray: np.ndarray) -> np.ndarray:
 
 def align(gray: np.ndarray, ecc_min: float = 1.3) -> np.ndarray:
     """Translate part centroid to image centre; rotate to principal axis if the part is elongated."""
+    img = gray  # may be BGR; geometry is estimated on the gray version, warp applies to img
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) if img.ndim == 3 else img
     h, w = gray.shape
     m = part_mask(gray)
     cnts, _ = cv2.findContours(m, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     if not cnts:
-        return gray
+        return img
     c = max(cnts, key=cv2.contourArea)
     mo = cv2.moments(c)
     if mo["m00"] < 50:
-        return gray
+        return img
     cx, cy = mo["m10"] / mo["m00"], mo["m01"] / mo["m00"]
     a, b, d = mo["mu20"] / mo["m00"], mo["mu02"] / mo["m00"], mo["mu11"] / mo["m00"]
     common = np.sqrt(((a - b) / 2) ** 2 + d**2)
@@ -47,7 +49,7 @@ def align(gray: np.ndarray, ecc_min: float = 1.3) -> np.ndarray:
     M = cv2.getRotationMatrix2D((cx, cy), angle, 1.0)
     M[0, 2] += w / 2 - cx
     M[1, 2] += h / 2 - cy
-    return cv2.warpAffine(gray, M, (w, h), flags=cv2.INTER_LINEAR, borderMode=cv2.BORDER_REPLICATE)
+    return cv2.warpAffine(img, M, (w, h), flags=cv2.INTER_LINEAR, borderMode=cv2.BORDER_REPLICATE)
 
 
 def _cell_stats(gray: np.ndarray) -> np.ndarray:

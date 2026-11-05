@@ -17,6 +17,9 @@ class Settings(BaseModel):
     seed: int = 0
     n_golden: int = 20
     n_val_good: int = 20
+    pc_val_good: int = 40
+    pc_train_max: int = 100
+    pc_size: int = 224
     align_mode: str = "none"  # none | translate | rotate
 
 

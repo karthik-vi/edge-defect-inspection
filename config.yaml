@@ -7,3 +7,7 @@ seed: 0
 n_golden: 20        # good train images used as golden references
 n_val_good: 20      # held-out good train images for threshold selection (never test images)
 align_mode: none  # none | translate | rotate (see docs/DECISIONS.md ADR-001)
+# PatchCore
+pc_val_good: 40      # held-out good train images for threshold (not in memory bank)
+pc_train_max: 100    # max good train images used to build the memory bank (CPU time budget)
+pc_size: 224
