@@ -53,6 +53,6 @@ Settings live in `config.yaml`. Methodology: `docs/BENCHMARKS.md`; environment: 
 - Only 3 categories, one seed, 100 good training images per category; differences below ~0.01 AUROC are noise.
 - Thresholds come from only 40 good validation parts, so test false-reject rate is noisy (metal_nut 9% vs 1% target).
 - Screw (small defects, random rotation) is not solved: recall 0.35-0.45.
-- "Edge" numbers are thread-limited emulation on a cloud VM, **not real Jetson/Raspberry Pi hardware**. GPU/TensorRT: see Phase 5 notebook (**not executed here**).
+- "Edge" numbers are thread-limited emulation on a cloud VM, **not real Jetson/Raspberry Pi hardware**. GPU/TensorRT and the supervised-vs-anomaly study: notebooks in `notebooks/` are written but **not executed here** (no GPU), so no results are claimed.
 - Docker image, docker-compose and Prometheus rules: **not verified in this environment** (no Docker daemon); only config syntax was validated.
 - Drift tested on synthetic perturbations only; its thresholds were tuned once on the same data (ADR-006).
