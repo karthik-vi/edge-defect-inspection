@@ -1,0 +1,90 @@
+{
+ "backend": "ov_fp32",
+ "date": "2026-11-05",
+ "ratio": 0.05,
+ "cpu": "x86_64",
+ "mean_image_auroc": 0.9696,
+ "mean_pixel_auroc": 0.9829,
+ "mean_pro": 0.9316,
+ "mean_recall_at_val_thr": 0.7774,
+ "mean_test_frr": 0.0303,
+ "bank_mb": 3.83,
+ "model_mb": 11.0,
+ "peak_rss_mb": 1671,
+ "latency_ms_by_threads": {
+  "1": {
+   "p50": 58.9,
+   "p95": 65.4,
+   "p99": 74.5
+  },
+  "2": {
+   "p50": 33.0,
+   "p95": 37.6,
+   "p99": 40.8
+  },
+  "4": {
+   "p50": 26.2,
+   "p95": 32.6,
+   "p99": 36.1
+  }
+ },
+ "rows": [
+  {
+   "category": "bottle",
+   "n_test": 83,
+   "n_bank_imgs": 100,
+   "bank_patches": 3920,
+   "bank_mb": 3.83,
+   "fit_s": 8.7,
+   "image_auroc": 1.0,
+   "pixel_auroc": 0.9807,
+   "pro": 0.9257,
+   "recall_at_val_thr": 0.9841,
+   "test_frr_at_val_thr": 0.0,
+   "recall_at_1pct_frr_oracle": 1.0,
+   "latency_ms": {
+    "p50": 26.2,
+    "p95": 33.8,
+    "p99": 43.2
+   }
+  },
+  {
+   "category": "metal_nut",
+   "n_test": 115,
+   "n_bank_imgs": 100,
+   "bank_patches": 3920,
+   "bank_mb": 3.83,
+   "fit_s": 8.0,
+   "image_auroc": 0.9922,
+   "pixel_auroc": 0.9811,
+   "pro": 0.9303,
+   "recall_at_val_thr": 0.9785,
+   "test_frr_at_val_thr": 0.0909,
+   "recall_at_1pct_frr_oracle": 0.9785,
+   "latency_ms": {
+    "p50": 25.2,
+    "p95": 35.6,
+    "p99": 38.1
+   }
+  },
+  {
+   "category": "screw",
+   "n_test": 160,
+   "n_bank_imgs": 100,
+   "bank_patches": 3920,
+   "bank_mb": 3.83,
+   "fit_s": 8.4,
+   "image_auroc": 0.9166,
+   "pixel_auroc": 0.9869,
+   "pro": 0.9388,
+   "recall_at_val_thr": 0.3697,
+   "test_frr_at_val_thr": 0.0,
+   "recall_at_1pct_frr_oracle": 0.5546,
+   "latency_ms": {
+    "p50": 25.5,
+    "p95": 26.9,
+    "p99": 35.4
+   }
+  }
+ ]
+}

@@ -33,3 +33,22 @@ All numbers are means over bottle/metal_nut/screw, one seed; differences < ~0.01
 
 **Threshold selection (documented):** the threshold is the 99% quantile of anomaly scores of 40 held-out *good train* images (no defect labels needed at setup). It gave mean test false-reject 3% (target 1%): bottle 0%, metal_nut 9%, screw 0%. With 40 samples the 99% quantile is essentially the max, so it is noisy; more validation parts would tighten it.
 **Known weakness:** recall at this threshold is 1.00 / 0.99 / **0.35** (bottle / nut / screw). Screw AUROC is 0.92 but its defects are small and score only slightly above the worst good parts, so a threshold that rejects 0% of good parts misses most of them. Screw is the honest limit of this model at 224 px.
+
+## ADR-004: Edge optimisation — runtime and INT8 (Phase 3)
+- **Problem / metric:** run on a small CPU/edge box; metrics = latency p50/p99 at 1/2/4 threads (*thread-limited emulation, not real Jetson/RPi hardware*), image/pixel AUROC change, model/bank size, cost per 1,000 parts.
+- **Options:** PyTorch FP32; ONNX Runtime FP32/INT8; OpenVINO FP32/INT8. INT8 = static post-training quantisation (QDQ, per-channel weights, 32 good train images across the 3 categories as calibration; no test images). Config: ResNet18 layers 2+3, 5% coreset (ADR-003).
+- **Evidence** (`results/edge_summary.md`, mean of 3 categories, full test split for accuracy, 40 random test images/category for latency, batch 1; FAISS threads = backend threads):
+
+| backend | img AUROC | pix AUROC | recall@val-thr | p50 ms 1 / 2 / 4 thr | model MB |
+|---|---|---|---|---|---|
+| PyTorch FP32 (baseline) | 0.9696 | 0.9829 | 0.78 | 71 / 40 / 28 | 11.0 |
+| ONNX Runtime FP32 | 0.9696 | 0.9829 | 0.78 | 59 / 33 / 30 | 11.0 |
+| **ONNX Runtime INT8** | 0.9678 | 0.9827 | 0.81 | 50 / 29 / 25 | 3.1 |
+| OpenVINO FP32 | 0.9696 | 0.9829 | 0.78 | 59 / 33 / 26 | 11.0 |
+| OpenVINO INT8 | 0.9643 | 0.9825 | 0.77 | 45 / 25 / 24 | 3.1 |
+
+- **Findings:** (1) ONNX FP32 reproduces PyTorch exactly. (2) INT8 shrinks the model 3.5x (11.0 → 3.1 MB); AUROC change is −0.0018 (ORT) / −0.0053 (OpenVINO), recall at the val threshold is within noise (+0.03 / −0.01). (3) The speed-up is modest: at 4 threads INT8 is ~15% faster than ORT FP32 and about the same as PyTorch FP32 (25 vs 28 ms) because FAISS search and map post-processing are not quantised; at 1 thread, OpenVINO INT8 is 1.6x faster than PyTorch (45 vs 71 ms). (4) At 4 threads on this 4-vCPU box all backends land within 24–30 ms, so the runtime choice matters mostly for *small* (1–2 thread) edge boxes.
+- **Decision (deployment config):** ONNX Runtime INT8, ResNet18 layers 2+3, 5% coreset: smallest accuracy change among the INT8 options, 3.1 MB model, single light runtime dependency (OpenVINO is only 2–4 ms faster and costs 0.005 AUROC). Not verified on real edge hardware.
+- **Bug found and fixed on the way (worth knowing for interviews):** the first ONNX export traced the pooling-matrix construction element by element (thousands of nodes) and ONNX Runtime output differed 31% from PyTorch; fixing it to be a constant gives an exact match. Second: ORT at 4 threads was 2x *slower* than at 2 threads (65 vs 33 ms) due to thread spinning contention with FAISS' OpenMP threads; `session.intra_op.allow_spinning=0` fixed it (65 → 30 ms).
+- **Cost:** 1,000 parts take ~25 s of a 4-vCPU box at 4 threads (40 parts/s); at an *assumed* $0.04/vCPU-hour (placeholder, not measured) that is ~$0.001 per 1,000 parts. Peak RSS in `results/edge/*.json` is for the whole benchmark process (it holds all test images), so it is an upper bound, not the service footprint.
+- **Dependencies added:** onnx + onnxruntime (export + inference, MIT), openvino (comparison, Apache-2.0).

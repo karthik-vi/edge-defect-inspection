@@ -27,3 +27,9 @@ Mean AUROC 0.716. Screw is ~chance: global golden-image rules cannot handle rand
 | **mean** | **0.972** (classical 0.716) | 0.983 | 0.932 | 0.78 | 0.03 | |
 
 Latency p50/p95/p99 (mean over categories): 34 / 41 / 54 ms (~29 parts/s on 4 threads) vs classical 1.2 ms. Best-latency config: 5% coreset, 24 / 32 / 39 ms, AUROC 0.970. WideResNet50: 0.954 AUROC at 70 / 83 / 91 ms (not better here).
+
+## Phase 3: edge optimisation (ONNX Runtime INT8, thread-limited emulation, not real Jetson/RPi hardware)
+- Command: `make bench-edge` (table: `results/edge_summary.md`, raw: `results/edge/*.json`), 2026-11-05; same 4-vCPU Xeon VM, ResNet18 layers 2+3, 5% coreset, batch 1, 224x224
+- INT8 PTQ (ORT static QDQ, 32 good-part calibration images): model 11.0 → 3.1 MB; mean image AUROC 0.9696 (FP32) → 0.9678 (INT8), delta −0.0018; pixel AUROC 0.9829 → 0.9827
+- Latency p50 (1 / 2 / 4 threads): PyTorch FP32 71 / 40 / 28 ms; ORT INT8 50 / 29 / 25 ms (p99 at 4 threads 37 ms; ~40 parts/s); OpenVINO INT8 45 / 25 / 24 ms
+- Cost per 1k parts uses an *assumed* $0.04/vCPU-hour: ~$0.001 (assumption, not a measurement)

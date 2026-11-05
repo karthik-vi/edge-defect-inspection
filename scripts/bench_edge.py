@@ -33,6 +33,7 @@ class OrtExt:
     def __init__(self, path: str, threads: int) -> None:
         so = ort.SessionOptions()
         so.intra_op_num_threads, so.inter_op_num_threads = threads, 1
+        so.add_session_config_entry("session.intra_op.allow_spinning", "0")  # avoids contention with FAISS OpenMP
         self.s = ort.InferenceSession(path, so, providers=["CPUExecutionProvider"])
 
     def __call__(self, x: torch.Tensor) -> torch.Tensor:
