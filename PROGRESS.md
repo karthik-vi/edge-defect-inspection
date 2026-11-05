@@ -1,13 +1,14 @@
 # PROGRESS
 ## Done
-- Phase 0: skeleton, Makefile, CI (ruff+pytest), config.yaml, docs, `make download` (bottle/metal_nut/screw from mydrive.ch via mvtec.com links; MVTec was NOT blocked; ~480 MB, gitignored).
-- Phase 1: classical baseline (`src/edgeinspect/classical.py`), `make bench-classical`, alignment ablation, ADR-001, results/RESUME_METRICS.md. Mean AUROC 0.716 (bottle 0.985, metal_nut 0.637, screw 0.526); ~1.2 ms/part p50.
+- Phase 0: skeleton, Makefile, CI (ruff+pytest, CPU torch), config.yaml, docs, `make download` (3 MVTec categories; MVTec not blocked).
+- Phase 1: classical baseline; mean AUROC 0.716 (ADR-001).
+- Phase 2: PatchCore (`src/edgeinspect/patchcore.py`, FAISS, greedy coreset), pixel AUROC/PRO, 9 runs (`make bench-patchcore`, ~15 min): backbone, layers, coreset, alignment ablations (ADR-002/003). Mean img AUROC 0.972, pixel 0.983, PRO 0.932, 34 ms p50.
 ## In progress
-- Nothing. Phase 1 acceptance (metrics + latency + tests) met.
+- Nothing. Phase 2 acceptance met (metrics per category, ablations, threshold from val-good documented).
 ## Next step
-- Phase 2: PatchCore (ResNet18 first) — needs torch, torchvision, faiss-cpu (not installed; record each in DECISIONS.md). Reuse `data.py`, `metrics.py`, threshold-from-val-good. Start with bottle only to size runtime (<15 min per run).
+- Phase 3 (edge optimisation): export ResNet18 extractor (layers 2+3) to ONNX; benchmark PyTorch vs ONNX Runtime (already installed) vs OpenVINO (needs `pip install openvino`, record in DECISIONS.md); INT8 PTQ with good-part calibration; 1/2/4 thread latency; accuracy change from INT8; deployment table. Use coreset 5%. Do not add a heatmap-example plot yet (README still lacks heatmap images and plots/).
 ## Blockers
 - None. Docker/GPU/TensorRT unavailable: label "not verified in this environment".
 ## How to resume
-`make setup && make download && make test && make bench-classical`; read docs/PROJECT_BRIEF.md.
-Notes: use `python3 -m pytest`; val threshold from 20 good images is noisy (consider more val-good in Phase 2).
+`make setup && make download && make test`; `make bench-classical bench-patchcore`; read docs/PROJECT_BRIEF.md.
+Caveats: val threshold from 40 good images is noisy (metal_nut test FRR 9%); alignment-ablation pixel metrics invalid (masks not warped); 1 seed; layer2-only+5% coreset combination untested.
