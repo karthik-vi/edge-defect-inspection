@@ -1,0 +1,77 @@
+{
+ "tag": "r18_nocoreset",
+ "args": {
+  "tag": "r18_nocoreset",
+  "backbone": "resnet18",
+  "layers": "2,3",
+  "ratio": 1.0,
+  "align": "none",
+  "dim": 256,
+  "threads": 4,
+  "cats": ""
+ },
+ "date": "2026-11-05",
+ "cpu": "x86_64",
+ "torch": "2.15.0+cpu",
+ "n_val_good": 40,
+ "pc_train_max": 100,
+ "rows": [
+  {
+   "category": "bottle",
+   "n_test": 83,
+   "n_bank_imgs": 100,
+   "bank_patches": 78400,
+   "bank_mb": 76.56,
+   "fit_s": 2.9,
+   "image_auroc": 1.0,
+   "pixel_auroc": 0.981,
+   "pro": 0.9277,
+   "recall_at_val_thr": 0.9841,
+   "test_frr_at_val_thr": 0.0,
+   "recall_at_1pct_frr_oracle": 1.0,
+   "latency_ms": {
+    "p50": 220.7,
+    "p95": 265.0,
+    "p99": 294.5
+   }
+  },
+  {
+   "category": "metal_nut",
+   "n_test": 115,
+   "n_bank_imgs": 100,
+   "bank_patches": 78400,
+   "bank_mb": 76.56,
+   "fit_s": 2.1,
+   "image_auroc": 0.9922,
+   "pixel_auroc": 0.9807,
+   "pro": 0.928,
+   "recall_at_val_thr": 0.9892,
+   "test_frr_at_val_thr": 0.0455,
+   "recall_at_1pct_frr_oracle": 0.9785,
+   "latency_ms": {
+    "p50": 221.3,
+    "p95": 259.5,
+    "p99": 286.4
+   }
+  },
+  {
+   "category": "screw",
+   "n_test": 160,
+   "n_bank_imgs": 100,
+   "bank_patches": 78400,
+   "bank_mb": 76.56,
+   "fit_s": 2.2,
+   "image_auroc": 0.9256,
+   "pixel_auroc": 0.9873,
+   "pro": 0.9079,
+   "recall_at_val_thr": 0.3697,
+   "test_frr_at_val_thr": 0.0,
+   "recall_at_1pct_frr_oracle": 0.4958,
+   "latency_ms": {
+    "p50": 219.4,
+    "p95": 268.5,
+    "p99": 282.2
+   }
+  }
+ ]
+}
