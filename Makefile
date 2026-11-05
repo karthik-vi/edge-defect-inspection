@@ -1,5 +1,6 @@
 .PHONY: setup download test lint bench-classical bench-patchcore
 setup:
+	pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
 	pip install -e . pytest ruff
 download:
 	scripts/download_data.sh
