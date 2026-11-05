@@ -1,7 +1,7 @@
 .PHONY: setup download test lint bench-classical bench-patchcore bench-edge build-deploy serve bench-drift
 setup:
 	pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
-	pip install -e . pytest ruff
+	pip install -e '.[bench]' pytest ruff
 download:
 	scripts/download_data.sh
 lint:

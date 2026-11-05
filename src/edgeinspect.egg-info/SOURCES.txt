@@ -5,10 +5,17 @@ src/edgeinspect/__init__.py
 src/edgeinspect/classical.py
 src/edgeinspect/config.py
 src/edgeinspect/data.py
+src/edgeinspect/drift.py
+src/edgeinspect/engine.py
 src/edgeinspect/metrics.py
+src/edgeinspect/patchcore.py
+src/edgeinspect/runtime.py
+src/edgeinspect/service.py
 src/edgeinspect.egg-info/PKG-INFO
 src/edgeinspect.egg-info/SOURCES.txt
 src/edgeinspect.egg-info/dependency_links.txt
 src/edgeinspect.egg-info/requires.txt
 src/edgeinspect.egg-info/top_level.txt
 tests/test_classical.py
+tests/test_patchcore.py
+tests/test_service_drift.py

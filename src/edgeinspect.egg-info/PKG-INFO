@@ -8,4 +8,21 @@ Requires-Dist: opencv-python-headless
 Requires-Dist: scikit-learn
 Requires-Dist: pyyaml
 Requires-Dist: pydantic-settings
+Requires-Dist: torch
+Requires-Dist: torchvision
+Requires-Dist: faiss-cpu
+Requires-Dist: onnx
+Requires-Dist: onnxruntime
+Requires-Dist: openvino
+Requires-Dist: fastapi
+Requires-Dist: uvicorn
+Requires-Dist: python-multipart
+Requires-Dist: httpx
+Requires-Dist: prometheus-client
+Requires-Dist: scipy
+Provides-Extra: bench
+Requires-Dist: mlflow-skinny; extra == "bench"
+Requires-Dist: sqlalchemy; extra == "bench"
+Requires-Dist: alembic; extra == "bench"
+Requires-Dist: matplotlib; extra == "bench"
 Dynamic: license-file
