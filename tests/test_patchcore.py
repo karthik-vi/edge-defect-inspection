@@ -46,3 +46,16 @@ def test_pixel_metrics():
     assert pixel_auroc(masks, perfect) > 0.99
     assert pro_auc(masks, perfect) > 0.9
     assert pro_auc(masks, np.random.default_rng(1).random(masks.shape)) < 0.3
+
+
+def test_pool_matrix_equals_adaptive_avg_pool():
+    import torch.nn.functional as F
+
+    from edgeinspect.patchcore import Extractor
+
+    ext = Extractor.__new__(Extractor)  # skip loading weights
+    torch.nn.Module.__init__(ext)
+    ext.dim = 256
+    x = torch.randn(10, 384)
+    ref = F.adaptive_avg_pool1d(x.unsqueeze(1), 256).squeeze(1)
+    assert torch.allclose(x @ ext._pool_matrix(384), ref, atol=1e-5)

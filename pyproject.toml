@@ -2,7 +2,7 @@
 name = "edgeinspect"
 version = "0.1.0"
 requires-python = ">=3.11"
-dependencies = ["numpy", "opencv-python-headless", "scikit-learn", "pyyaml", "pydantic-settings", "torch", "torchvision", "faiss-cpu"]
+dependencies = ["numpy", "opencv-python-headless", "scikit-learn", "pyyaml", "pydantic-settings", "torch", "torchvision", "faiss-cpu", "onnx", "onnxruntime", "openvino"]
 [tool.setuptools.packages.find]
 where = ["src"]
 [tool.ruff]

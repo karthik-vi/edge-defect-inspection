@@ -27,6 +27,16 @@ class Extractor(torch.nn.Module):
         for p in self.parameters():
             p.requires_grad_(False)
 
+    def _pool_matrix(self, c: int) -> torch.Tensor:
+        """Channel reduction as a (C, dim) matrix == adaptive_avg_pool1d, but ONNX/INT8 friendly."""
+        if getattr(self, "_pm", None) is None or self._pm.shape[0] != c:
+            w = torch.zeros(c, self.dim)
+            for i in range(self.dim):
+                a, b = (i * c) // self.dim, -(-((i + 1) * c) // self.dim)
+                w[a:b, i] = 1.0 / (b - a)
+            self._pm = w
+        return self._pm
+
     @torch.no_grad()
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         x = self.stem(x)
@@ -43,7 +53,7 @@ class Extractor(torch.nn.Module):
         f = torch.cat(feats, 1)                                  # B,C,H,W
         b, c, h, w = f.shape
         f = f.permute(0, 2, 3, 1).reshape(-1, c)                  # B*H*W, C
-        f = F.adaptive_avg_pool1d(f.unsqueeze(1), self.dim).squeeze(1)
+        f = f @ self._pool_matrix(c)
         return f.reshape(b, h, w, self.dim)
 
 
